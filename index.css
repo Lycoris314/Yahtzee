@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+body {
+    background-color: blanchedalmond;
+}
+
+.diceRoll {
+    cursor: pointer;
+    background-color: blueviolet;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 10px;
+    transition: 0.3s;
+}
+
+.diceRoll:hover {
+    background-color: rgb(163, 95, 227);
+}
+
+
+img.dice {
+    width: 100px;
+    height: 100px;
+}

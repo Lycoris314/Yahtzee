@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiceRoll</title>
+    <link rel="preload" href="svg/6d1.svg" as="image">
+    <link rel="preload" href="svg/6d2.svg" as="image">
+    <link rel="preload" href="svg/6d3.svg" as="image">
+    <link rel="preload" href="svg/6d4.svg" as="image">
+    <link rel="preload" href="svg/6d5.svg" as="image">
+    <link rel="preload" href="svg/6d6.svg" as="image">
+
+
+    <link rel="stylesheet" href="index.css">
+    <script src="jquery.js"></script>
+    <script src="dice.js"></script>
+    <script src="diceroll.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <h1>ダイスロール</h1>
+    <div>
+        <form class="form1">ダイス数 <input type="number" class="number1" value="1" min="1" max="100">個 <button
+                class="diceRoll">ダイスロール！</button><input type="checkbox" id="check1" checked><label
+                for="check1">アニメーション</label>
+        </form>
+        <p class="outcome1">ここにダイスロール結果を表示します。</p>
+        <div class="outcomeImgs1">
+            <img src="svg/6d1.svg" class="dice">
+        </div>
+    </div>
+    <hr>
+    <div>
+        <form class="form2">ダイス数 <input type="number" class="number2" value="1" min="1" max="100">個 <button
+                class="diceRoll">ダイスロール！</button><input type="checkbox" id="check2" checked><label
+                for="check2">アニメーション</label>
+        </form>
+        <p class="outcome2">ここにダイスロール結果を表示します。</p>
+        <div class="outcomeImgs2">
+            <img src="svg/6d1.svg" class="dice">
+        </div>
+    </div>
+</body>
+
+</html>
