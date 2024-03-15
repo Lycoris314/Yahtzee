@@ -31,9 +31,9 @@ class Dice {
         return this.#element
     }
 
-    animateDiceroll(times, interval) {
+    async animateDiceroll(times, interval) {
 
-        function asyncRoll(ms, elm) {
+        const asyncRoll = (ms) => {
 
             return new Promise((resolve) => {
 
@@ -41,7 +41,7 @@ class Dice {
 
                     let num = Math.floor(6 * Math.random()) + 1;
 
-                    elm.attr("src", Dice.rootImgDirPath + Dice.diceImgs[num]);
+                    this.#element.attr("src", Dice.rootImgDirPath + Dice.diceImgs[num]);
 
                     resolve();
                 }, ms);
@@ -51,12 +51,12 @@ class Dice {
 
         let arr = [];
         for (let i = 0; i < times; i++) {
-            arr.push(asyncRoll(interval * i, this.#element));
+
+            arr.push(asyncRoll(interval * i));
         }
 
-        return Promise.all(arr).then(() => {
-            return this.diceroll();
-        })
+        await Promise.all(arr);
+        return this.diceroll();
 
     }
 }

@@ -21,7 +21,7 @@ $(() => {
     })
 
 
-    $(".form2").on("submit", (e) => {
+    $(".form2").on("submit", e => {
         e.preventDefault();
         const num = Number($(".number2").val());
 

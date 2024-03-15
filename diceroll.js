@@ -8,7 +8,7 @@ class DiceRoll {
         this.#num = num;
         this.#jqRoot = jqRoot;
 
-        this.#dices = new Array(num).fill(null).map(e => new Dice());
+        this.#dices = new Array(num).fill(null).map(_ => new Dice());
 
         this.#dices.forEach(elm => jqRoot.append(elm.element));
 
@@ -23,13 +23,12 @@ class DiceRoll {
         return arr;
     }
 
-    animateDiceroll(times, interval) {
+    async animateDiceroll(times, interval) {
         let arr = [];
         for (let dice of this.#dices) {
             arr.push(dice.animateDiceroll(times, interval));
         }
-        return Promise.all(arr).then((val) => {
-            return val;
-        })
+        const val = await Promise.all(arr);
+        return val;
     }
 }
