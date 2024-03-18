@@ -10,11 +10,19 @@ class Dice {
         "6d6.svg",
     ]
 
-    #diceNum = null;
-    #element
+    #diceNum = 1;
+    #element;
+    #place; //非キープゾーンでの位置 
+    #isKeep = false;
+    #keepPlace;//キープ状態の場合に、その位置
 
-    constructor() {
-        this.#element = $("<img class='dice'>");
+    constructor(place) {
+        this.#place = place;
+        this.#element = $("<img class='dice'>")
+            .attr("src", Dice.rootImgDirPath + Dice.diceImgs[1])
+            .addClass("place" + place)
+            .attr("data-place", place);
+
     }
 
     diceroll() {
@@ -23,12 +31,43 @@ class Dice {
         return this.#diceNum;
     }
 
+    toggleKeep(index) {
+
+        this.#isKeep = !this.#isKeep;
+        this.#element.toggleClass("keep");
+
+        //キープ状態にした場合
+        if (this.#element.hasClass("keep")) {
+            this.#element.addClass("nth" + index)
+            this.#keepPlace = index;
+            return -1;
+            //キープ状態から外した場合
+        } else {
+            this.#element.removeClass("nth0 nth1 nth2 nth3 nth4");
+            const place = this.#keepPlace;
+            this.#keepPlace = null;
+            return place
+        }
+    }
+
     get diceNum() {
         return this.#diceNum;
     }
 
     get element() {
         return this.#element
+    }
+
+    get isKeep() {
+        return this.#isKeep
+    }
+
+    set isKeep(val) {
+        this.#isKeep = val;
+    }
+
+    resetKeepPlace() {
+        this.#keepPlace = null;
     }
 
     async animateDiceroll(times, interval) {

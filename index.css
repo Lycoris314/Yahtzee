@@ -2,24 +2,248 @@
 
 body {
     background-color: blanchedalmond;
+    margin: 0;
+}
+
+h1 {
+    margin: 20px;
+}
+
+.container {
+    display: flex;
+    gap: 10px;
+    width: max-content;
+    margin: 0 auto;
+}
+
+.desc {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* フィールド内 */
+.field {
+    background-color: mediumblue;
+    width: max-content;
+    height: 550px;
+    position: relative;
+}
+
+.keeps {
+    display: flex;
+    gap: 5px;
+}
+
+.keep {
+    background-color: darkblue;
+    width: 100px;
+    height: 100px;
+    color: white;
+}
+
+.handText {
+    position: absolute;
+    background-color: blueviolet;
+    color: white;
+    opacity: 0;
+    height: 100px;
+    width: 100%;
+    font-size: 1.5rem;
+    display: grid;
+    place-content: center;
+    transition: 0.3s;
+}
+
+.handText.show {
+    opacity: 1;
+}
+
+
+p:has(.diceRoll) {
+    text-align: center;
 }
 
 .diceRoll {
     cursor: pointer;
     background-color: blueviolet;
     color: white;
+    font-size: 1.1rem;
     border: none;
     border-radius: 20px;
     padding: 5px 10px;
     transition: 0.3s;
+    width: 150px;
+    height: 50px;
 }
 
 .diceRoll:hover {
     background-color: rgb(163, 95, 227);
 }
 
+.diceRoll:disabled {
+    background-color: gray;
+    cursor: auto;
+}
+
 
 img.dice {
     width: 100px;
     height: 100px;
+    position: absolute;
+    transition: 1s;
+}
+
+
+.place0 {
+    left: 100px;
+    top: 280px;
+}
+
+.place1 {
+    left: 100px;
+    top: 400px;
+}
+
+.place2 {
+    left: 210px;
+    top: 340px;
+}
+
+.place3 {
+    left: 320px;
+    top: 280px;
+}
+
+.place4 {
+    left: 320px;
+    top: 400px;
+}
+
+.keep.nth0 {
+    left: 0;
+    top: 0;
+}
+
+.keep.nth1 {
+    left: 105px;
+    top: 0;
+}
+
+.keep.nth2 {
+    left: 210px;
+    top: 0;
+}
+
+.keep.nth3 {
+    left: 315px;
+    top: 0;
+}
+
+.keep.nth4 {
+    left: 420px;
+    top: 0;
+}
+
+.scoreTable {
+    border: 1px solid silver
+}
+
+thead th:nth-child(1) {
+    width: 120px;
+}
+
+thead th:nth-child(n+2) {
+    width: 60px;
+}
+
+.scoreTable th {
+    background-color: burlywood;
+}
+
+td {
+    text-align: center;
+}
+
+td.decided {
+    font-weight: bold;
+    color: rgb(117, 0, 200);
+    font-size: 1.1rem;
+}
+
+td.turn {
+    background-color: rgb(249, 202, 183);
+}
+
+
+td.clickable {
+    cursor: pointer;
+}
+
+td.clickable:hover {
+    opacity: 0.8;
+}
+
+.bonus {
+    color: rgb(15, 95, 95)
+}
+
+.sum {
+    color: crimson
+}
+
+/* ルール関係 */
+.rule {
+    position: fixed;
+    bottom: 0;
+    right: 10%;
+    width: 100px;
+    height: 40px;
+    border-radius: 20px 20px 0 0;
+    border: none;
+    background-color: blueviolet;
+    color: white;
+    font-size: 1.2rem;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.rule:hover {
+    background-color: rgb(163, 95, 227);
+}
+
+.ruleBack {
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    bottom: -100%;
+    display: grid;
+    place-content: center;
+    transition: 0.3s;
+    z-index: 2;
+}
+
+.ruleBack.show {
+    bottom: 0;
+}
+
+.ruleMain {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    background-color: white;
+    padding: 10px;
+    overflow-x: scroll;
+    margin: auto;
+}
+
+details {
+    margin: 5px;
+
+}
+
+summary {
+    background-color: rgb(252, 195, 195);
+    padding: 5px;
 }
