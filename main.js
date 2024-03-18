@@ -10,7 +10,7 @@ $(() => {
     let inGame = true; //ゲーム中かどうか
     let totalTurn = 0; //経過したターン。全24ターン
     let player = 0; //誰の番か(0が1P,1が2P)
-    let rollTimes = 0; //サイコロを振った回数
+    let rollTimes = 0; //そのターン中にサイコロを振った回数
     let inAnimation = false;//ダイスロールアニメーション中か
 
 
@@ -43,7 +43,7 @@ $(() => {
 
         scoreTable.calcTemporaryScores(player, res);
 
-        //役が成立した場合の表示
+        //役が成立した場合のポップ
         let handText = "";
 
         if (Hand.FOURDICE(res) > 0) {
@@ -104,7 +104,7 @@ $(() => {
 
             $(`td:nth-of-type(${player + 1})`).removeClass("turn");
 
-            //ゲーム終了(24ターン経過)
+            //ゲーム終了(24=12手役×2人)
             if (totalTurn >= 24) {
                 inGame = false;
                 $(".diceRoll").attr("disabled", true);
@@ -148,7 +148,7 @@ $(() => {
         if (rollTimes >= 3) return;
         if (inAnimation) return;
 
-        const keepPlaces = diceRoll.keepPlaces
+        const keepPlaces = diceRoll.keepPlaces;
 
         const n = Number($(this).attr("data-place"));
 
