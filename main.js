@@ -1,29 +1,77 @@
 $(() => {
-    document.onselectstart = () => false;
-    document.onmousedown = () => false;
+
+
+    const MAX_ROLL_TIMES = 3; //各ターンに賽を振る回数の上限
+    const DICES_NUM = 5; //賽の数
+    let playersNum; //プレイヤー人数
 
     const jqRoot = $(".field");
-    const diceRoll = new DiceRoll(5, jqRoot);
-    const scoreTable = new ScoreTable();
+    const diceRoll = new DiceRoll(DICES_NUM, jqRoot);
+    let scoreTable;
+
+    $("#form").on("submit", function (e) {
+        e.preventDefault();
+
+        $(".start").addClass("hidden");
+        playersNum = Number($("#num").val());
+
+        setHTML(playersNum);
+
+        scoreTable = new ScoreTable(playersNum);
+
+        $("p.desc").text(textA(0, 0));
+
+        $(`td:nth-of-type(1)`).addClass("turn");
+
+        temporaryScoreEvent(playersNum);
+
+        document.onselectstart = () => false;
+        document.onmousedown = () => false;
+    })
+
+
+    function setHTML(playersNum) {
+
+        for (let i = 0; i < playersNum; i++) {
+            const td = $("<th>").text(`${i + 1}P`);
+            $("thead>tr").append(td);
+        }
+
+        function appendTd(hand, times) {
+            for (let i = 0; i < times; i++) {
+                const td = $("<td>").attr("data-hand", hand);
+                $("." + hand).append(td);
+            }
+        }
+
+        ["one", "two", "three", "four", "five", "six",
+            "choice", "fourdice", "fullhouse",
+            "s_straight", "b_straight", "yahtzee"]
+            .forEach(hand => appendTd(hand, playersNum))
+
+        for (let i = 0; i < playersNum; i++) {
+            const td = $("<td>").text("0/63");
+            $("." + "bonus").append(td);
+        }
+        for (let i = 0; i < playersNum; i++) {
+            const td = $("<td>").text("0");
+            $("." + "sum").append(td);
+        }
+
+    }
+
 
     //パラメータ群
     let inGame = true; //ゲーム中かどうか
-    let totalTurn = 0; //経過したターン。全24ターン
-    let player = 0; //誰の番か(0が1P,1が2P)
+    let player = 0; //誰の番か(0が1P,1が2P,...)
     let rollTimes = 0; //そのターン中にサイコロを振った回数
     let inAnimation = false;//ダイスロールアニメーション中か
+    let keepPlaces = Array(DICES_NUM).fill(false); //各ダイスのキープ状態
 
 
     function textA(player, rollTimes) {
         return `${player + 1}Pのターンです。${rollTimes}/3回目`;
     }
-
-    //開始時
-    $("p.desc").text(textA(0, 0));
-
-    $(`td:nth-of-type(1)`).addClass("turn");
-
-
 
 
     //ダイスロールボタンを押す
@@ -46,19 +94,24 @@ $(() => {
         //役が成立した場合のポップ
         let handText = "";
 
-        if (Hand.FOURDICE(res) > 0) {
+        if (Hand.FOURDICE(res) > 0 &&
+            !(scoreTable.playerScores[player].get("fourdice").isDecided)) {
             handText = "フォーダイス！"
         }
-        if (Hand.FULLHOUSE(res) > 0) {
+        if (Hand.FULLHOUSE(res) > 0 &&
+            !(scoreTable.playerScores[player].get("fullhouse").isDecided)) {
             handText = "フルハウス！"
         }
-        if (Hand.S_STRAIGHT(res) > 0) {
+        if (Hand.S_STRAIGHT(res) > 0 &&
+            !(scoreTable.playerScores[player].get("s_straight").isDecided)) {
             handText = "Sストレート！"
         }
-        if (Hand.B_STRAIGHT(res) > 0) {
+        if (Hand.B_STRAIGHT(res) > 0 &&
+            !(scoreTable.playerScores[player].get("b_straight").isDecided)) {
             handText = "Bストレート！"
         }
-        if (Hand.YAHTZEE(res) > 0) {
+        if (Hand.YAHTZEE(res) > 0 &&
+            !(scoreTable.playerScores[player].get("yahtzee").isDecided)) {
             handText = "ヨット！"
         }
         if (handText !== "") {
@@ -73,71 +126,93 @@ $(() => {
 
         inAnimation = false
 
-        if (rollTimes > 2) {
+        if (rollTimes >= MAX_ROLL_TIMES) {
             $(".diceRoll").attr("disabled", true);
         }
     })
 
-
     //テンポラリースコアを押す
-    for (let i = 0; i < 2; i++) {
-        $(`tbody td:nth-of-type(${i + 1})`).on("click", function () {
+    function temporaryScoreEvent(playersNum) {
 
-            if (!player === i) return;
+        for (let i = 0; i < playersNum; i++) {
+            console.log("kokomade")
+            $(`tbody td:nth-of-type(${i + 1})`).on("click", function () {
 
-            if (inAnimation) return;
+                if (!player === i) return;
 
-            const hand = $(this).attr("data-hand");
+                if (inAnimation) return;
 
-            if (hand === undefined) return;//ボーナスはクリックできないように
+                const hand = $(this).attr("data-hand");
 
-            const score = scoreTable.playerScores[i].find(score => score.element.attr("data-hand") === hand);
+                if (hand === undefined) return;//ボーナスはクリックできないように
 
-            if (score.isDecided) return;
+                const score = scoreTable.playerScores[i].get(hand);
 
-            if (score.element.text() === "") return;
+                if (score.isDecided) return;
 
-            score.click();
-            scoreTable.turnChange(player);
+                if (score.element.text() === "") return;
 
-            totalTurn += 1;
 
-            $(`td:nth-of-type(${player + 1})`).removeClass("turn");
 
-            //ゲーム終了(24=12手役×2人)
-            if (totalTurn >= 24) {
-                inGame = false;
-                $(".diceRoll").attr("disabled", true);
+                score.click();
+                scoreTable.turnChange(player);
 
-                //最終結果表示
-                const scores = scoreTable.getSumScores();
 
-                if (scores[0] > scores[1]) {
-                    $("p.desc").text("ゲーム終了！1Pの勝ち！");
-                } else if (scores[0] < scores[1]) {
-                    $("p.desc").text("ゲーム終了！2Pの勝ち！");
-                } else {
-                    $("p.desc").text("引き分け！");
+                $(`td:nth-of-type(${player + 1})`).removeClass("turn");
+
+                inGame =
+                    Array.from(scoreTable.playerScores[playersNum - 1].values())
+                        .map(score => score.isDecided).some(elm => !elm);
+
+                if (!inGame) {
+                    $(".diceRoll").attr("disabled", true);
+
+                    //最終結果表示
+                    const scores = scoreTable.getSumScores();
+
+                    if (playersNum === 1) {
+                        $("p.desc").text(`お疲れ様でした。最終得点は${scores[0]}です！`);
+                        return;
+                    }
+
+                    const max = Math.max(...scores);
+
+                    if (scores.every(score => score === max)) {
+                        $("p.desc").text("引き分け！");
+                    } else {
+                        let winners = [];
+                        scores.forEach((score, index) => {
+                            if (score === max) {
+                                winners.push(index + 1);
+                            }
+                        })
+                        let text = "";
+                        winners.forEach(elm => {
+                            text += (elm + "P ");
+                        })
+                        $("p.desc").text(text + "の勝ち！");
+                    }
+                    return;
+
                 }
-                return;
-            }
 
-            //ゲーム続行
-            player = (player + 1) % 2; //次のプレイヤー
+                //ゲーム続行
+                player = (player + 1) % playersNum; //次のプレイヤー
 
-            $(`td:nth-of-type(${player + 1})`).addClass("turn");
+                $(`td:nth-of-type(${player + 1})`).addClass("turn");
 
-            rollTimes = 0;
+                rollTimes = 0;
 
-            $("p.desc").text(textA(player, 0));
+                $("p.desc").text(textA(player, 0));
 
-            $(".diceRoll").attr("disabled", false);
+                $(".diceRoll").attr("disabled", false);
 
-            diceRoll.offKeep();
+                diceRoll.offKeep();
+                keepPlaces = Array(DICES_NUM).fill(false);
 
-        })
+            })
+        }
     }
-
 
 
     //ダイスを押す
@@ -145,26 +220,24 @@ $(() => {
 
         if (!inGame) return;
         if (rollTimes === 0) return;
-        if (rollTimes >= 3) return;
+        if (rollTimes >= MAX_ROLL_TIMES) return;
         if (inAnimation) return;
-
-        const keepPlaces = diceRoll.keepPlaces;
 
         const n = Number($(this).attr("data-place"));
 
         //キープゾーンの内、空いている最小の番号
-        const index = keepPlaces.indexOf(0);
+        const index = keepPlaces.indexOf(false);
 
         const place = diceRoll.dices[n].toggleKeep(index);
 
         if (place >= 0) { //keepゾーンからもどした場合
-            keepPlaces[place] = 0;
+            keepPlaces[place] = false;
             $(".diceRoll").attr("disabled", false);
 
         } else { //keepゾーンに移した場合
-            keepPlaces[index] = 1;
+            keepPlaces[index] = true;
 
-            if (keepPlaces.every(elm => elm === 1)) {
+            if (keepPlaces.every(elm => elm === true)) {
                 $(".diceRoll").attr("disabled", true);
             }
         }

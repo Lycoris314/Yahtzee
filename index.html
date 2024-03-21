@@ -24,8 +24,18 @@
 </head>
 
 <body>
+    <div class="start">
+        <p class="title">YAHTZEE</p>
+        <form id="form">
+            <p>
+                <label for="num">プレイヤーの人数を選択：</label>
+                <input type="number" id="num" value="2" min="1" max="100">
+            </p>
+            <button class="startbtn">スタート</button>
+        </form>
+    </div>
 
-    <h1>ヨット</h1>
+    <h1>YAHTZEE</h1>
     <main>
         <p class="desc"></p>
 
@@ -47,82 +57,52 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>1P</th>
-                        <th>2P</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="one">
                         <th>1</th>
-                        <td data-hand="one"></td>
-                        <td data-hand="one"></td>
                     </tr>
                     <tr class="two">
                         <th>2</th>
-                        <td data-hand="two"></td>
-                        <td data-hand="two"></td>
                     </tr>
                     <tr class="three">
                         <th>3</th>
-                        <td data-hand="three"></td>
-                        <td data-hand="three"></td>
                     </tr>
                     <tr class="four">
                         <th>4</th>
-                        <td data-hand="four"></td>
-                        <td data-hand="four"></td>
                     </tr>
                     <tr class="five">
                         <th>5</th>
-                        <td data-hand="five"></td>
-                        <td data-hand="five"></td>
                     </tr>
                     <tr class="six">
                         <th>6</th>
-                        <td data-hand="six"></td>
-                        <td data-hand="six"></td>
                     </tr>
                     <tr class="bonus">
                         <th>ボーナス</th>
-                        <td>0/63</td>
-                        <td>0/63</td>
                     </tr>
                     <tr class="choice">
                         <th>チョイス</th>
-                        <td data-hand="choice"></td>
-                        <td data-hand="choice"></td>
                     </tr>
                     <tr class="fourdice">
                         <th>フォーダイス</th>
-                        <td data-hand="fourdice"></td>
-                        <td data-hand="fourdice"></td>
                     </tr>
                     <tr class="fullhouse">
                         <th>フルハウス</th>
-                        <td data-hand="fullhouse"></td>
-                        <td data-hand="fullhouse"></td>
                     </tr>
                     <tr class="s_straight">
                         <th>S・ストレート</th>
-                        <td data-hand="s_straight"></td>
-                        <td data-hand="s_straight"></td>
                     </tr>
                     <tr class="b_straight">
                         <th>B・ストレート</th>
-                        <td data-hand="b_straight"></td>
-                        <td data-hand="b_straight"></td>
                     </tr>
                     <tr class="yahtzee">
                         <th>ヨット</th>
-                        <td data-hand="yahtzee"></td>
-                        <td data-hand="yahtzee"></td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="sum">
                         <th>合計</th>
-                        <td>0</td>
-                        <td>0</td>
                     </tr>
                 </tfoot>
             </table>

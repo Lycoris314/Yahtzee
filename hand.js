@@ -1,11 +1,9 @@
 class Hand {
 
     static sumOfNum(result, n) {
-        let score = 0;
-        for (let i of result) {
-            if (i == n) score += n;
-        }
-        return score;
+        return result.reduce((accum, current) =>
+            accum + (current === n ? n : 0)
+            , 0)
     }
 
     static ACES = function (result) {
@@ -46,54 +44,29 @@ class Hand {
     }
 
     static FOURDICE = function (result) {
-        if (Hand.countEach(result).filter(elm => elm >= 4).length > 0) {
-            return result.reduce((accum, val) => accum + val);
-        } else {
-            return 0;
-        }
+        return Hand.countEach(result).filter(elm => elm >= 4).length > 0 ?
+            result.reduce((accum, val) => accum + val) : 0;
     }
-
 
     static FULLHOUSE = function (result) {
         const count = Hand.countEach(result);
-        //console.log(count);
-        if (count.filter(elm => elm === 2).length > 0
-            && count.filter(elm => elm === 3).length > 0) {
-            return 25;
-        } else {
-            return 0;
-        }
-
+        return (count.filter(elm => elm === 2).length > 0
+            && count.filter(elm => elm === 3).length > 0) ? 25 : 0;
     }
 
     static S_STRAIGHT = function (result) {
         const count = Hand.countEach(result);
-        if (count[0] * count[1] * count[2] * count[3]
+        return (count[0] * count[1] * count[2] * count[3]
             + count[1] * count[2] * count[3] * count[4]
-            + count[2] * count[3] * count[4] * count[5] > 0) {
-            return 30;
-        } else {
-            return 0;
-        }
+            + count[2] * count[3] * count[4] * count[5] > 0) ? 30 : 0;
     }
 
     static B_STRAIGHT = function (result) {
         const count = Hand.countEach(result);
-        if (count[1] * count[2] * count[3] * count[4] === 1) {
-            return 40;
-        } else {
-            return 0;
-        }
+        return (count[1] * count[2] * count[3] * count[4] === 1) ? 40 : 0;
     }
 
     static YAHTZEE = function (result) {
-        const count = Hand.countEach(result);
-        if (count.filter(elm => elm === 5).length > 0) {
-            return 50;
-        } else {
-            return 0;
-        }
+        return (Hand.countEach(result).filter(elm => elm === 5).length > 0) ? 50 : 0
     }
-
-
 }

@@ -62,11 +62,9 @@ class Dice {
         return this.#isKeep
     }
 
-    set isKeep(val) {
-        this.#isKeep = val;
-    }
-
     resetKeepPlace() {
+        this.#isKeep = false;
+        this.element.removeClass("keep nth0 nth1 nth2 nth3 nth4");
         this.#keepPlace = null;
     }
 

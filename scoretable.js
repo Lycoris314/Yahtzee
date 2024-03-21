@@ -1,6 +1,7 @@
 class ScoreTable {
+    #playerNum;
     #playerScores = [];
-    #bonus = [0, 0];
+    #bonus;
 
     static rules = [
         [Hand.ACES, "one"],
@@ -18,13 +19,20 @@ class ScoreTable {
     ]
 
 
-    constructor() {
-        for (let i = 1; i <= 2; i++) {
-            let arr = [];
+    constructor(playerNum) {
+
+        this.#playerNum = playerNum;
+
+        this.#bonus = Array(playerNum).fill(0);
+
+        for (let i = 1; i <= playerNum; i++) {
+
+            let map = new Map();
+
             for (let hand of ScoreTable.rules) {
-                arr.push(new Score(hand[0], $(`tr.${hand[1]}>td:nth-of-type(${i})`)))
+                map.set(hand[1], new Score(hand[0], $(`tr.${hand[1]}>td:nth-of-type(${i})`)))
             }
-            this.#playerScores.push(arr);
+            this.#playerScores.push(map);
         }
     }
 
@@ -32,10 +40,7 @@ class ScoreTable {
 
         const scores = this.#playerScores[turn];
 
-        for (let score of scores) {
-
-            score.viewTemporaryValue(results);
-        }
+        scores.forEach(score => score.viewTemporaryValue(results));
     }
 
     get playerScores() {
@@ -45,15 +50,18 @@ class ScoreTable {
 
     turnChange(turn) {
 
+        const scores = this.#playerScores[turn];
+
         function score(hand) {
-            return Number($(`tr.${hand}>td:nth-of-type(${turn + 1})`).text())
+            const re = scores.get(hand).decidedScore;
+            return re === undefined ? 0 : re;
         }
 
-        const scores = this.#playerScores[turn];
-        for (let score of scores) {
+        scores.forEach(score => {
             score.deleteTemporaryValue();
             score.element.removeClass("clickable");
-        }
+        });
+
         const sum =
             score("one") + score("two") + score("three")
             + score("four") + score("five") + score("six");
@@ -80,12 +88,13 @@ class ScoreTable {
     }
 
     getSumScores() {
-        let sumScores = [0, 0];
+        let sumScores = Array(this.#playerNum).fill(0);
 
-        for (let i = 0; i < 2; i++) {
-            for (let score of this.#playerScores[i]) {
-                sumScores[i] += Number(score.decidedScore);
-            }
+        for (let i = 0; i < this.#playerNum; i++) {
+
+            this.#playerScores[i].forEach((score) => {
+                sumScores[i] += score.decidedScore;
+            })
             sumScores[i] += this.#bonus[i];
         }
         return sumScores;
