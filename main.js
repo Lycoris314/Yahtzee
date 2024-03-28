@@ -126,7 +126,7 @@ $(() => {
                 .addClass("show").text(text);
             setTimeout(() => {
                 $(".handText").removeClass("show");
-            }, 2500)
+            }, 2000)
         }
 
         $(".diceRoll").attr("disabled", false);
@@ -202,6 +202,7 @@ $(() => {
                     }
 
                     $("p.desc").text(desc_text(scores));
+                    return;
                 }
 
                 //ゲーム続行
