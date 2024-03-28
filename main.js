@@ -27,6 +27,7 @@ $(() => {
 
         document.onselectstart = () => false;
         document.onmousedown = () => false;
+
     })
 
 
@@ -92,31 +93,37 @@ $(() => {
         scoreTable.calcTemporaryScores(player, res);
 
         //役が成立した場合のポップ
-        let handText = "";
+        function handText(res, map) {
 
-        if (Hand.FOURDICE(res) > 0 &&
-            !(scoreTable.playerScores[player].get("fourdice").isDecided)) {
-            handText = "フォーダイス！"
+            let handText = "";
+
+            if (Hand.FOURDICE(res) > 0 &&
+                !(map.get("fourdice").isDecided)) {
+                handText = "フォーダイス！"
+            }
+            if (Hand.FULLHOUSE(res) > 0 &&
+                !(map.get("fullhouse").isDecided)) {
+                handText = "フルハウス！"
+            }
+            if (Hand.S_STRAIGHT(res) > 0 &&
+                !(map.get("s_straight").isDecided)) {
+                handText = "Sストレート！"
+            }
+            if (Hand.B_STRAIGHT(res) > 0 &&
+                !(map.get("b_straight").isDecided)) {
+                handText = "Bストレート！"
+            }
+            if (Hand.YAHTZEE(res) > 0 &&
+                !(map.get("yahtzee").isDecided)) {
+                handText = "ヨット！"
+            }
+            return handText;
         }
-        if (Hand.FULLHOUSE(res) > 0 &&
-            !(scoreTable.playerScores[player].get("fullhouse").isDecided)) {
-            handText = "フルハウス！"
-        }
-        if (Hand.S_STRAIGHT(res) > 0 &&
-            !(scoreTable.playerScores[player].get("s_straight").isDecided)) {
-            handText = "Sストレート！"
-        }
-        if (Hand.B_STRAIGHT(res) > 0 &&
-            !(scoreTable.playerScores[player].get("b_straight").isDecided)) {
-            handText = "Bストレート！"
-        }
-        if (Hand.YAHTZEE(res) > 0 &&
-            !(scoreTable.playerScores[player].get("yahtzee").isDecided)) {
-            handText = "ヨット！"
-        }
-        if (handText !== "") {
+
+        const text = handText(res, scoreTable.playerScores[player]);
+        if (text !== "") {
             $(".handText")
-                .addClass("show").text(handText);
+                .addClass("show").text(text);
             setTimeout(() => {
                 $(".handText").removeClass("show");
             }, 2500)
@@ -135,7 +142,7 @@ $(() => {
     function temporaryScoreEvent(playersNum) {
 
         for (let i = 0; i < playersNum; i++) {
-            console.log("kokomade")
+
             $(`tbody td:nth-of-type(${i + 1})`).on("click", function () {
 
                 if (!player === i) return;
@@ -170,30 +177,31 @@ $(() => {
                     //最終結果表示
                     const scores = scoreTable.getSumScores();
 
-                    if (playersNum === 1) {
-                        $("p.desc").text(`お疲れ様でした。最終得点は${scores[0]}です！`);
-                        return;
+                    function desc_text(scores) {
+
+                        if (scores.length === 1) {
+                            return `お疲れ様でした。最終得点は${scores[0]}点です！`;
+                        }
+
+                        const max = Math.max(...scores);
+                        if (scores.every(score => score === max)) {
+                            return "引き分け！";
+                        } else {
+                            let winners = [];
+                            scores.forEach((score, index) => {
+                                if (score === max) {
+                                    winners.push(index + 1);
+                                }
+                            })
+                            let text = "";
+                            winners.forEach(elm => {
+                                text += (elm + "P ");
+                            })
+                            return text + "の勝ち！";
+                        }
                     }
 
-                    const max = Math.max(...scores);
-
-                    if (scores.every(score => score === max)) {
-                        $("p.desc").text("引き分け！");
-                    } else {
-                        let winners = [];
-                        scores.forEach((score, index) => {
-                            if (score === max) {
-                                winners.push(index + 1);
-                            }
-                        })
-                        let text = "";
-                        winners.forEach(elm => {
-                            text += (elm + "P ");
-                        })
-                        $("p.desc").text(text + "の勝ち！");
-                    }
-                    return;
-
+                    $("p.desc").text(desc_text(scores));
                 }
 
                 //ゲーム続行
