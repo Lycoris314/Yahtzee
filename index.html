@@ -1,179 +1,176 @@
 <!DOCTYPE html>
 <html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ヨット</title>
+        <link rel="preload" href="svg/6d1.svg" as="image" />
+        <link rel="preload" href="svg/6d2.svg" as="image" />
+        <link rel="preload" href="svg/6d3.svg" as="image" />
+        <link rel="preload" href="svg/6d4.svg" as="image" />
+        <link rel="preload" href="svg/6d5.svg" as="image" />
+        <link rel="preload" href="svg/6d6.svg" as="image" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ヨット</title>
-    <link rel="preload" href="svg/6d1.svg" as="image">
-    <link rel="preload" href="svg/6d2.svg" as="image">
-    <link rel="preload" href="svg/6d3.svg" as="image">
-    <link rel="preload" href="svg/6d4.svg" as="image">
-    <link rel="preload" href="svg/6d5.svg" as="image">
-    <link rel="preload" href="svg/6d6.svg" as="image">
+        <link rel="stylesheet" href="index.css" />
+        <script src="jquery.js"></script>
+        <script src="hand.js"></script>
+        <script src="dice.js"></script>
+        <script src="diceroll.js"></script>
+        <script src="score.js"></script>
+        <script src="scoretable.js"></script>
+        <script src="main.js"></script>
+    </head>
 
-
-    <link rel="stylesheet" href="index.css">
-    <script src="jquery.js"></script>
-    <script src="hand.js"></script>
-    <script src="dice.js"></script>
-    <script src="diceroll.js"></script>
-    <script src="score.js"></script>
-    <script src="scoretable.js"></script>
-    <script src="main.js"></script>
-</head>
-
-<body>
-    <div class="start">
-        <p class="title">YAHTZEE</p>
-        <form id="form">
-            <p>
-                <label for="num">プレイヤーの人数を選択：</label>
-                <input type="number" id="num" value="2" min="1" max="100">
-            </p>
-            <button class="startbtn">スタート</button>
-        </form>
-    </div>
-
-    <h1>YAHTZEE</h1>
-    <main>
-        <p class="desc"></p>
-
-
-        <div class="container">
-            <div class="field">
-                <div class="keeps">
-                    <div class="keep">keep</div>
-                    <div class="keep">keep</div>
-                    <div class="keep">keep</div>
-                    <div class="keep">keep</div>
-                    <div class="keep">keep</div>
-                </div>
-                <p class="handText"></p>
-
-            </div>
-
-            <table class="scoreTable">
-                <thead>
-                    <tr>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="one">
-                        <th>1</th>
-                    </tr>
-                    <tr class="two">
-                        <th>2</th>
-                    </tr>
-                    <tr class="three">
-                        <th>3</th>
-                    </tr>
-                    <tr class="four">
-                        <th>4</th>
-                    </tr>
-                    <tr class="five">
-                        <th>5</th>
-                    </tr>
-                    <tr class="six">
-                        <th>6</th>
-                    </tr>
-                    <tr class="bonus">
-                        <th>ボーナス</th>
-                    </tr>
-                    <tr class="choice">
-                        <th>チョイス</th>
-                    </tr>
-                    <tr class="fourdice">
-                        <th>フォーダイス</th>
-                    </tr>
-                    <tr class="fullhouse">
-                        <th>フルハウス</th>
-                    </tr>
-                    <tr class="s_straight">
-                        <th>S・ストレート</th>
-                    </tr>
-                    <tr class="b_straight">
-                        <th>B・ストレート</th>
-                    </tr>
-                    <tr class="yahtzee">
-                        <th>ヨット</th>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="sum">
-                        <th>合計</th>
-                    </tr>
-                </tfoot>
-            </table>
-
-        </div>
-        <p><button class="diceRoll">ダイスロール！</button></p>
-    </main>
-
-    <button class="rule">ルール</button>
-    <div class="ruleBack">
-        <div class="ruleMain">
-            <section>
-                <h2>ルール</h2>
-                <hr>
+    <body>
+        <div class="start">
+            <p class="title">YAHTZEE</p>
+            <form id="form">
                 <p>
-                    5つのサイコロを振って手役を作ります。キープするサイコロを選びながら、２回まで振りなおすことができます。手役に応じて得点が得られ、より高い合計得点を得たものの勝ちとなります。
+                    <label for="num">プレイヤーの人数を選択：</label>
+                    <input type="number" id="num" value="2" min="1" max="100" />
                 </p>
-            </section>
-            <section>
-                <h2>手順</h2>
-                <hr>
-                <h3>1.ダイスロール！ボタンでサイコロを振る</h3>
-                <p>まず５個のサイコロを振ります。</p>
-                <h3>2.キープするサイコロを決める</h3>
-                <p>振った後のサイコロをクリックすると出目をキープできます。キープしたサイコロをクリックするとキープを解除できます。不要な目のサイコロを振りなおしてより強い手役をつくりましょう。振り直すごとにキープ/キープ解除を選択できます。
-                </p>
-                <h3>3.スコア表を埋める</h3>
-                <p>まだ選んでいないスコア表のマスをクリックして手役を決めます。得点できる手役がなくても必ず１つ選びます。次の人に交代します。</p>
-                <h3>4.1~3を繰り返す</h3>
-                <p>スコア表のすべてが埋まったらゲーム終了です。合計点数が一番高いプレイヤーが勝ちとなります。</p>
-
-            </section>
-            <section>
-                <h2>手役</h2>
-                <hr>
-                <details>
-                    <summary>1~6</summary>
-                    (対応する数字)×(その数が出たサイコロの数)を得点とする。
-                </details>
-                <details>
-                    <summary>ボーナス</summary>
-                    1~6の手役の合計点数が63点以上になると成立する。35点。
-                </details>
-                <details>
-                    <summary>チョイス</summary>
-                    条件はなく、すべての目の合計を得点とする。
-                </details>
-                <details>
-                    <summary>フォーダイス</summary>
-                    同じ目を４つ以上揃えた場合に、すべての目の合計を得点とする。
-                </details>
-                <details>
-                    <summary>フルハウス</summary>
-                    3つの同じ目と2つの同じ目を揃えた場合に25点を得点とする。すべて同じ目の場合はフルハウスとならない。
-                </details>
-                <details>
-                    <summary>S・ストレート</summary>
-                    1,2,3,4または2,3,4,5または3,4,5,6の目の組が揃っている場合に30点を得点とする。
-                </details>
-                <details>
-                    <summary>B・ストレート</summary>
-                    1,2,3,4,5または2,3,4,5,6の目の組が揃っている場合に40点を得点とする。
-                </details>
-                <details>
-                    <summary>ヨット</summary>
-                    5つの目がすべて同じ場合に50点を得点とする。
-                </details>
-            </section>
-
+                <button class="startbtn">スタート</button>
+            </form>
         </div>
-    </div>
-</body>
 
+        <h1>YAHTZEE</h1>
+        <main>
+            <p class="desc"></p>
+
+            <div class="container">
+                <div class="field">
+                    <div class="keeps">
+                        <div class="keep">keep</div>
+                        <div class="keep">keep</div>
+                        <div class="keep">keep</div>
+                        <div class="keep">keep</div>
+                        <div class="keep">keep</div>
+                    </div>
+                    <p class="handText"></p>
+                </div>
+
+                <table class="scoreTable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="one">
+                            <th>1</th>
+                        </tr>
+                        <tr class="two">
+                            <th>2</th>
+                        </tr>
+                        <tr class="three">
+                            <th>3</th>
+                        </tr>
+                        <tr class="four">
+                            <th>4</th>
+                        </tr>
+                        <tr class="five">
+                            <th>5</th>
+                        </tr>
+                        <tr class="six">
+                            <th>6</th>
+                        </tr>
+                        <tr class="bonus">
+                            <th>ボーナス</th>
+                        </tr>
+                        <tr class="choice">
+                            <th>チョイス</th>
+                        </tr>
+                        <tr class="fourdice">
+                            <th>フォーダイス</th>
+                        </tr>
+                        <tr class="fullhouse">
+                            <th>フルハウス</th>
+                        </tr>
+                        <tr class="s_straight">
+                            <th>S・ストレート</th>
+                        </tr>
+                        <tr class="b_straight">
+                            <th>B・ストレート</th>
+                        </tr>
+                        <tr class="yahtzee">
+                            <th>ヨット</th>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="sum">
+                            <th>合計</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <p><button class="diceRoll">ダイスロール！</button></p>
+        </main>
+
+        <button class="rule">ルール</button>
+        <div class="ruleBack">
+            <div class="ruleMain">
+                <section>
+                    <h2>ルール</h2>
+                    <hr />
+                    <p>
+                        5つのサイコロを振って手役を作ります。キープするサイコロを選びながら、２回まで振りなおすことができます。手役に応じて得点が得られ、より高い合計得点を得たものの勝ちとなります。
+                    </p>
+                </section>
+                <section>
+                    <h2>手順</h2>
+                    <hr />
+                    <h3>1.ダイスロール！ボタンでサイコロを振る</h3>
+                    <p>まず５個のサイコロを振ります。</p>
+                    <h3>2.キープするサイコロを決める</h3>
+                    <p>
+                        振った後のサイコロをクリックすると出目をキープできます。キープしたサイコロをクリックするとキープを解除できます。不要な目のサイコロを振りなおしてより強い手役をつくりましょう。振り直すごとにキープ/キープ解除を選択できます。
+                    </p>
+                    <h3>3.スコア表を埋める</h3>
+                    <p>
+                        まだ選んでいないスコア表のマスをクリックして手役を決めます。得点できる手役がなくても必ず１つ選びます。次の人に交代します。
+                    </p>
+                    <h3>4.1~3を繰り返す</h3>
+                    <p>
+                        スコア表のすべてが埋まったらゲーム終了です。合計点数が一番高いプレイヤーが勝ちとなります。
+                    </p>
+                </section>
+                <section>
+                    <h2>手役</h2>
+                    <hr />
+                    <details>
+                        <summary>1~6</summary>
+                        (対応する数字)×(その数が出たサイコロの数)を得点とする。
+                    </details>
+                    <details>
+                        <summary>ボーナス</summary>
+                        1~6の手役の合計点数が63点以上になると成立し、35点を得点とする。
+                    </details>
+                    <details>
+                        <summary>チョイス</summary>
+                        条件はなく、すべての目の合計を得点とする。
+                    </details>
+                    <details>
+                        <summary>フォーダイス</summary>
+                        同じ目を４つ以上揃えた場合に、すべての目の合計を得点とする。
+                    </details>
+                    <details>
+                        <summary>フルハウス</summary>
+                        3つの同じ目と2つの同じ目を揃えた場合に25点を得点とする。すべて同じ目の場合はフルハウスとならない。
+                    </details>
+                    <details>
+                        <summary>S・ストレート</summary>
+                        1,2,3,4または2,3,4,5または3,4,5,6の目の組が揃っている場合に30点を得点とする。
+                    </details>
+                    <details>
+                        <summary>B・ストレート</summary>
+                        1,2,3,4,5または2,3,4,5,6の目の組が揃っている場合に40点を得点とする。
+                    </details>
+                    <details>
+                        <summary>ヨット</summary>
+                        5つの目がすべて同じ場合に50点を得点とする。
+                    </details>
+                </section>
+            </div>
+        </div>
+    </body>
 </html>
